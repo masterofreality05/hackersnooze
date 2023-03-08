@@ -15,6 +15,18 @@ const $navUserProfile = $("#nav-user-profile");
 const $navLogOut = $("#nav-logout");
 const favouriteStories = []
 const respondedfavourites  = []
+
+document.body.addEventListener("click", function(e){
+  if(e.target.innerText == "Remove from favourites"){
+    let removeStoryId = e.target.getAttribute('id')
+    console.log("clicked a remove button") //this is now working (thanks to delegation)
+    let removingIndex = currentUser.favorites.indexOf(removeStoryId);
+    currentUser.favorites.splice(removeStoryId,1)
+    window.location.reload()
+
+    
+  //
+}})
 /** To make it easier for individual components to show just themselves, this
  * is a useful function that hides pretty much everything on the page. After
  * calling this, individual components can re-show just what they want.

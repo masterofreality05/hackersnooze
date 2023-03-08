@@ -74,18 +74,10 @@ function updateNavOnLogin() {
       for(let story of stories){
         let markedUpFav =generateStoryMarkup(story)
         $allStoriesList.append(markedUpFav).append(`<a id="${story.storyId}"class="remove story-user">Remove from favourites</a>`)
-        let removeButtons = document.getElementsByClassName('remove')
-
-        for(let button of removeButtons){
-          button.addEventListener("click", function(e){
-            let storyId = e.target.getAttribute("id")
-            console.log("story id is" + storyId)
-            let index = currentUser.favorites.indexOf(storyId);
-            console.log("index is " + index)
-            currentUser.favorites.splice(index, 1).then($allStoriesList)
-          })
         
-        }
+        
+        
+        
 
       }
      
