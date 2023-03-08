@@ -22,7 +22,8 @@ document.body.addEventListener("click", function(e){
     console.log("clicked a remove button") //this is now working (thanks to delegation)
     let removingIndex = currentUser.favorites.indexOf(removeStoryId);
     currentUser.favorites.splice(removeStoryId,1)
-    window.location.reload()
+    favoriteClickHandler()
+    //then we need to remake our beautiful storylist
 
     
   //

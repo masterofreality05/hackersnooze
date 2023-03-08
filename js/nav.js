@@ -26,6 +26,35 @@ function navLoginClick(evt) {
 $navLogin.on("click", navLoginClick);
 
 /** When a user first logins in, update the navbar to reflect that. */
+async function favoriteClickHandler(){
+console.log("running favoriteClickHandler")
+let storyObjectList = []
+$allStoriesList.empty()
+
+ console.log("clicked favourites")
+ for(let faves of currentUser.favorites){
+  const response = await axios({
+    url: `${BASE_URL}/stories/${faves}`,
+    method: "GET",
+    
+  });
+  console.log("this is our response " +  response.data.story)
+  let respondedStory = response.data.story;
+  
+ 
+  storyObjectList.push(respondedStory)
+  
+}
+console.log("storyObjectlist" + storyObjectList)
+
+  const stories = storyObjectList.map(story => new Story(story))
+  for(let story of stories){
+    let markedUpFav =generateStoryMarkup(story)
+    $allStoriesList.append(markedUpFav).append(`<a id="${story.storyId}"class="remove story-user">Remove from favourites</a>`)
+  
+  }
+ 
+}
 
 function updateNavOnLogin() {
   console.debug("updateNavOnLogin");
@@ -46,47 +75,12 @@ function updateNavOnLogin() {
     $newStoryForm.show()
    })
 
-   function putFavStoriesOnPage() {
-   
+
+  
+   $('#favorites').on("click", favoriteClickHandler)
   }
-  
-   $('#favorites').on("click", async function(e){
-    let storyObjectList = []
-    $allStoriesList.empty()
-     e.preventDefault()
-     console.log("clicked favourites")
-     for(let faves of currentUser.favorites){
-      const response = await axios({
-        url: `${BASE_URL}/stories/${faves}`,
-        method: "GET",
-        
-      });
-      console.log("this is our response " +  response.data.story)
-      let respondedStory = response.data.story;
-      
-     
-      storyObjectList.push(respondedStory)
-      
-    }
-    console.log("storyObjectlist" + storyObjectList)
-  
-      const stories = storyObjectList.map(story => new Story(story))
-      for(let story of stories){
-        let markedUpFav =generateStoryMarkup(story)
-        $allStoriesList.append(markedUpFav).append(`<a id="${story.storyId}"class="remove story-user">Remove from favourites</a>`)
-        
-        
-        
-        
-
-      }
-     
 
 
-
-     
-    
-   })}
 
  
 
