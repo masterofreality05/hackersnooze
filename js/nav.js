@@ -24,20 +24,28 @@ function navLoginClick(evt) {
 $navLogin.on("click", navLoginClick);
 
 /** When a user first logins in, update the navbar to reflect that. */
-async function favoriteClickHandler(){
+async function storyClickHandler(storylist){
+let storyIdArray = [];
 let storyObjectList = []
 $allStoriesList.empty()
- for(let faves of currentUser.favorites){
+ for(let faves of storylist){
+  
   const response = await axios({
     url: `${BASE_URL}/stories/${faves}`,
     method: "GET",
     
   });
   let respondedStory = response.data.story;
+  storyIdArray.push(response.data.story.storyId)
+  
+  console.log(respondedStory)
 
   storyObjectList.push(respondedStory)
   
 }
+let localStorageDir;
+storylist == currentUser.favorites? localStorageDir = "favorites": localStorageDir = "own stories"
+window.localStorage.setItem(`${localStorageDir}`, storyIdArray)
 
   const stories = storyObjectList.map(story => new Story(story))
   for(let story of stories){
@@ -47,29 +55,6 @@ $allStoriesList.empty()
   }
 }
 
-async function ownClickHandler(){
-  let storyObjectList = []
-  $allStoriesList.empty()
-   for(let owns of currentUser.ownStories){
-    console.log(owns)
-    const response = await axios({
-      url: `${BASE_URL}/stories/${owns}`,
-      method: "GET",
-      
-    });
-    let respondedStory = response.data.story;
-  
-    storyObjectList.push(respondedStory)
-    
-  }
-  
-    const stories = storyObjectList.map(story => new Story(story))
-    for(let story of stories){
-      let markedUpFav =generateStoryMarkup(story)
-      $allStoriesList.append(markedUpFav).append(`<a id="${story.storyId}"class="remove story-user">Remove from favourites</a>`)
-    
-    }
-  }
 function updateNavOnLogin() {
   console.debug("updateNavOnLogin");
   $(".main-nav-links").show();
@@ -88,8 +73,12 @@ function updateNavOnLogin() {
     $newStoryForm.toggle()
    })
 
-   $('#favorites').on("click", favoriteClickHandler)
-   $('#ownStories').on("click", ownClickHandler)
+   $('#favorites').on("click", function(e){
+    storyClickHandler(currentUser.favorites)
+   })
+   $('#ownStories').on("click", function(e){
+    storyClickHandler(currentUser.ownStories)
+   })
   }
 
  
