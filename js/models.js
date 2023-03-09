@@ -33,7 +33,6 @@ class StoryList {
   constructor(stories) {
     this.stories = stories;
   }
-
   /** Generate a new StoryList. It:
    *
    *  - calls the API
@@ -41,7 +40,6 @@ class StoryList {
    *  - makes a single StoryList instance out of that
    *  - returns the StoryList instance.
    */
-
   static async getStories() {
     // Note presence of `static` keyword: this indicates that getStories is
     //  **not** an instance method. Rather, it is a method that is called on the
@@ -80,12 +78,10 @@ class StoryList {
     });
     await getAndShowStoriesOnStart();
 }
-
 }
 /******************************************************************************
  * User: a user in the system (only used to represent the current user)
  */
-
 class User {
   /** Make user instance from obj of user data and a token:
    *   - {username, name, createdAt, favorites[], ownStories[]}
@@ -111,7 +107,6 @@ class User {
     // store the login token on the user so it's easy to find for API calls.
     this.loginToken = token;
   }
-
   /** Register new user in API, make User instance & return it.
    *
    * - username: a new username
@@ -139,7 +134,6 @@ class User {
       response.data.token
     );
   }
-
   /** Login in user with API, make User instance & return it.
 
    * - username: an existing user's username
@@ -170,7 +164,6 @@ class User {
   /** When we already have credentials (token & username) for a user,
    *   we can log them in automatically. This function does that.
    */
-
   static async loginViaStoredCredentials(token, username) {
     try {
       const response = await axios({

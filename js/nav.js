@@ -11,11 +11,9 @@ function navAllStories(evt) {
   hidePageComponents();
   putStoriesOnPage();
 }
-
 $body.on("click", "#nav-all", navAllStories);
 
 /** Show login/signup on click on "login" */
-
 function navLoginClick(evt) {
   console.debug("navLoginClick", evt);
   hidePageComponents();
@@ -36,8 +34,7 @@ $allStoriesList.empty()
     
   });
   let respondedStory = response.data.story;
-  
- 
+
   storyObjectList.push(respondedStory)
   
 }
@@ -64,7 +61,7 @@ function updateNavOnLogin() {
   $('#submitShow').on("click", function(e){
     
     e.preventDefault();
-    $newStoryForm.show()
+    $newStoryForm.toggle()
    })
 
    $('#favorites').on("click", favoriteClickHandler)
