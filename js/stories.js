@@ -13,7 +13,7 @@ async function getAndShowStoriesOnStart() {
 }
 
 function generateStoryMarkup(story) {
-  console.debug("generateStoryMarkup", story);
+  //console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
   let $favorite = $(`<a class="favorite" id="${story.storyId}">Add to Favorites</a>`)

@@ -46,6 +46,30 @@ $allStoriesList.empty()
   
   }
 }
+
+async function ownClickHandler(){
+  let storyObjectList = []
+  $allStoriesList.empty()
+   for(let owns of currentUser.ownStories){
+    console.log(owns)
+    const response = await axios({
+      url: `${BASE_URL}/stories/${owns}`,
+      method: "GET",
+      
+    });
+    let respondedStory = response.data.story;
+  
+    storyObjectList.push(respondedStory)
+    
+  }
+  
+    const stories = storyObjectList.map(story => new Story(story))
+    for(let story of stories){
+      let markedUpFav =generateStoryMarkup(story)
+      $allStoriesList.append(markedUpFav).append(`<a id="${story.storyId}"class="remove story-user">Remove from favourites</a>`)
+    
+    }
+  }
 function updateNavOnLogin() {
   console.debug("updateNavOnLogin");
   $(".main-nav-links").show();
@@ -54,7 +78,7 @@ function updateNavOnLogin() {
   $navUserProfile.text(`${currentUser.username}`).show();
   $('.navbar-brand').append('<span><a id="submitShow" class="userLink">Submit </a></span>')
   $('.navbar-brand').append('<span><a id="favorites" class="userLink">Favorites</a></span')
-  $('.navbar-brand').append('<a id="myStories" class="userLink">My Stories</a>')
+  $('.navbar-brand').append('<a id="ownStories" class="userLink">My Stories</a>')
   $('.navbar-brand').append($newStoryForm)
   $newStoryForm.hide()
 
@@ -65,7 +89,11 @@ function updateNavOnLogin() {
    })
 
    $('#favorites').on("click", favoriteClickHandler)
+   $('#ownStories').on("click", ownClickHandler)
   }
+
+ 
+
 
 
 

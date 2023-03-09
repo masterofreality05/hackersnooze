@@ -76,6 +76,9 @@ class StoryList {
     
      
     });
+    let ownStoryId = response.data.story.storyId
+    console.log("ownStoryID is " + ownStoryId )
+    currentUser.ownStories.push(ownStoryId)
     await getAndShowStoriesOnStart();
 }
 }
