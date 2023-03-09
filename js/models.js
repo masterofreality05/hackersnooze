@@ -1,7 +1,6 @@
 "use strict";
 
 const BASE_URL = "https://hack-or-snooze-v3.herokuapp.com";
-
 /******************************************************************************
  * Story: a single story in the system
  */
@@ -22,7 +21,6 @@ class Story {
   }
 
   /** Parses hostname out of URL and returns it. */
-
   getHostName() {
     // UNIMPLEMENTED: complete this function!
     return this.url;
@@ -31,7 +29,6 @@ class Story {
 /******************************************************************************
  * List of Story instances: used by UI to show story lists in DOM.
  */
-
 class StoryList {
   constructor(stories) {
     this.stories = stories;
@@ -73,22 +70,18 @@ class StoryList {
 
   async addStory(user, { title, author, url }) {
     //currentUser is passed as user, story is passed in axious POST as an object
-    console.log(user)
     const token = user.loginToken;
     const response = await axios ({
       method: "POST",
       url: `${BASE_URL}/stories`,
       data: { token, story: { title, author, url } },
-      //this is working
-
-      
-      //this now adds a story to the storyList API
-      
+    
+     
     });
-}
+    await getAndShowStoriesOnStart();
 }
 
-
+}
 /******************************************************************************
  * User: a user in the system (only used to represent the current user)
  */

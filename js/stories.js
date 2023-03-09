@@ -17,12 +17,11 @@ function generateStoryMarkup(story) {
 
   const hostName = story.getHostName();
   let $favorite = $(`<a class="favorite" id="${story.storyId}">Add to Favorites</a>`)
+  let $delete = $(`<a class="deleteStory" id="${story.storyId}">Delete Story</a>`)
   $favorite.on("click", function(e){
     currentUser.favorites.push($favorite.attr("id"))
     //successfully pushes the story ID of favourited story to the currentUser.
   })
-/console.log("hostname is " + hostName)
-console.log("properties passed are " + story)
 
   return $(`
       <li id="${story.storyId}">
@@ -34,7 +33,7 @@ console.log("properties passed are " + story)
         <small class="story-user">posted by ${story.username}</small>
       </li>
     
-    `).append($favorite);
+    `).append($favorite).append($('<br>')).append($delete);
 }
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */

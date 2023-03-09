@@ -27,25 +27,20 @@ $navLogin.on("click", navLoginClick);
 
 /** When a user first logins in, update the navbar to reflect that. */
 async function favoriteClickHandler(){
-console.log("running favoriteClickHandler")
 let storyObjectList = []
 $allStoriesList.empty()
-
- console.log("clicked favourites")
  for(let faves of currentUser.favorites){
   const response = await axios({
     url: `${BASE_URL}/stories/${faves}`,
     method: "GET",
     
   });
-  console.log("this is our response " +  response.data.story)
   let respondedStory = response.data.story;
   
  
   storyObjectList.push(respondedStory)
   
 }
-console.log("storyObjectlist" + storyObjectList)
 
   const stories = storyObjectList.map(story => new Story(story))
   for(let story of stories){
@@ -53,9 +48,7 @@ console.log("storyObjectlist" + storyObjectList)
     $allStoriesList.append(markedUpFav).append(`<a id="${story.storyId}"class="remove story-user">Remove from favourites</a>`)
   
   }
- 
 }
-
 function updateNavOnLogin() {
   console.debug("updateNavOnLogin");
   $(".main-nav-links").show();
@@ -71,12 +64,9 @@ function updateNavOnLogin() {
   $('#submitShow').on("click", function(e){
     
     e.preventDefault();
-    console.log("hey it clicked")
     $newStoryForm.show()
    })
 
-
-  
    $('#favorites').on("click", favoriteClickHandler)
   }
 
