@@ -1,16 +1,13 @@
 "use strict";
-
 const BASE_URL = "https://hack-or-snooze-v3.herokuapp.com";
 /******************************************************************************
  * Story: a single story in the system
  */
-
 class Story {
 
   /** Make instance of Story from data object about story:
    *   - {title, author, url, username, storyId, createdAt}
    */
-
   constructor({ storyId, title, author, url, username, createdAt }) {
     this.storyId = storyId;
     this.title = title;
@@ -19,7 +16,6 @@ class Story {
     this.username = username;
     this.createdAt = createdAt;
   }
-
   /** Parses hostname out of URL and returns it. */
   getHostName() {
     // UNIMPLEMENTED: complete this function!
@@ -40,25 +36,43 @@ class StoryList {
    *  - makes a single StoryList instance out of that
    *  - returns the StoryList instance.
    */
-  static async getStories() {
+  static async getStories(input, typeOfStory) {
+    console.log("running get stories")
     // Note presence of `static` keyword: this indicates that getStories is
     //  **not** an instance method. Rather, it is a method that is called on the
     //  class directly. Why doesn't it make sense for getStories to be an
     //  instance method?
 
     // query the /stories endpoint (no auth required)
-    const response = await axios({
-      url: `${BASE_URL}/stories`,
-      method: "GET",
-    });
+    if (input == currentUser.username){
+      let token = currentUser.loginToken;
+    const response = await axios.get(`${BASE_URL}/users/D` , {params: {token}})
+    console.log("this is the user info" + response.data.user.favorites);
 
-    // turn plain old story objects from API into instances of Story class
-    const stories = response.data.stories.map(story => new Story(story));
+    if(typeOfStory == "favorite"){
+      console.log("populating favorites")
+      const stories = response.data.user.favorites.map(story => new Story(story));
+       return new StoryList(stories);
 
-    // build an instance of our own class using the new array of stories
-    return new StoryList(stories);
+    } else if(typeOfStory == "own"){
+       const stories = response.data.user.stories.map(story => new Story(story));
+       return new StoryList(stories);
+    }
+
+  } else  {
+      console.log("looking for all stories")
+       const response = await axios({
+          url: `${BASE_URL}/stories`,
+          method: "GET",
+
+    })
+       // turn plain old story objects from API into instances of Story class
+       const stories = response.data.stories.map(story => new Story(story));
+
+       // build an instance of our own class using the new array of stories
+       return new StoryList(stories);
   }
-
+  }
   /** Adds story data to API, makes a Story instance, adds it to story list.
    * - user - the current instance of User who will post the story
    * - obj of {title, author, url}
@@ -73,13 +87,7 @@ class StoryList {
       method: "POST",
       url: `${BASE_URL}/stories`,
       data: { token, story: { title, author, url } },
-    
-     
     });
-    let ownStoryId = response.data.story.storyId
-    console.log("ownStoryID is " + ownStoryId )
-    currentUser.ownStories.push(ownStoryId)
-    await getAndShowStoriesOnStart();
 }
 }
 /******************************************************************************
@@ -90,7 +98,6 @@ class User {
    *   - {username, name, createdAt, favorites[], ownStories[]}
    *   - token
    */
-
   constructor({
                 username,
                 name,
@@ -102,7 +109,6 @@ class User {
     this.username = username;
     this.name = name;
     this.createdAt = createdAt;
-
     // instantiate Story instances for the user's favorites and ownStories
     this.favorites = favorites.map(s => new Story(s));
     this.ownStories = ownStories.map(s => new Story(s));
@@ -116,7 +122,6 @@ class User {
    * - password: a new password
    * - name: the user's full name
    */
-
   static async signup(username, password, name) {
     const response = await axios({
       url: `${BASE_URL}/signup`,
@@ -142,7 +147,6 @@ class User {
    * - username: an existing user's username
    * - password: an existing user's password
    */
-
   static async login(username, password) {
     const response = await axios({
       url: `${BASE_URL}/login`,
@@ -163,7 +167,6 @@ class User {
       response.data.token
     );
   }
-
   /** When we already have credentials (token & username) for a user,
    *   we can log them in automatically. This function does that.
    */
@@ -174,7 +177,6 @@ class User {
         method: "GET",
         params: { token },
       });
-
       let { user } = response.data;
 
       return new User(
