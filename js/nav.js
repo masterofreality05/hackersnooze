@@ -7,8 +7,7 @@
 async function navAllStories(evt) {
   console.debug("navAllStories", evt);
   hidePageComponents();
-  storyList = await StoryList.getStories();
-  putStoriesOnPage()
+  getAndShowStoriesOnStart()
 }
 $body.on("click", "#nav-all", navAllStories);
 /** Show login/signup on click on "login" */
@@ -39,9 +38,8 @@ function updateNavOnLogin() {
    })
 
    $('#favorites').on("click", async function(e){
-    storyList = await StoryList.getStories(currentUser.username, "favorite");
     $storiesLoadingMsg.remove();
- 
+    storyList = await StoryList.getStories(currentUser.username, "favorite");
     putStoriesOnPage("favorited");
 
    })

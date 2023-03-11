@@ -9,6 +9,7 @@ async function getAndShowStoriesOnStart(input) {
 
 putStoriesOnPage();
 }
+
 function generateStoryMarkup(story, favorite) {
   const hostName = story.getHostName();
   let $delete = $(`<a class="deleteStory" id="${story.storyId}">Delete Story</a>`)
@@ -25,12 +26,10 @@ function generateStoryMarkup(story, favorite) {
       data: { token },
 
   })
-  storyList = await StoryList.getStories();
-  putStoriesOnPage()
+ getAndShowStoriesOnStart()
 })
 
   $favorite.on("click", async function(e){
-    //adding to favorites
     let storyId = e.target.getAttribute('id')
     let user = currentUser.username;
     let token = currentUser.loginToken
@@ -55,34 +54,23 @@ function generateStoryMarkup(story, favorite) {
   })
   storyList = await StoryList.getStories(currentUser.username, "favorite");
   putStoriesOnPage("favorited")
+
 })
-if(favorite == undefined){
 
-  return $(`
-      <li id="${story.storyId}">
-        <a href="${story.url}" target="a_blank" class="story-link">
-          ${story.title}
-        </a>
-        <small class="story-hostname">(${hostName})</small>
-        <small class="story-author">by ${story.author}</small>
-        <small class="story-user">posted by ${story.username}</small>
-      </li>
-    `).append($favorite).append($('<br>')).append($delete);
-} 
-else if(favorite == "favorited") {
+let $markup = $(`
+<li id="${story.storyId}">
+  <a href="${story.url}" target="a_blank" class="story-link">
+    ${story.title}
+  </a>
+  <small class="story-hostname">(${hostName})</small>
+  <small class="story-author">by ${story.author}</small>
+  <small class="story-user">posted by ${story.username}</small>
+</li>
+`)
 
-  return $(`
-  <li id="${story.storyId}">
-    <a href="${story.url}" target="a_blank" class="story-link">
-      ${story.title}
-    </a>
-    <small class="story-hostname">(${hostName})</small>
-    <small class="story-author">by ${story.author}</small>
-    <small class="story-user">posted by ${story.username}</small>
-  </li>
+favorite == "favorited"? $markup.append($remove).append($('<br>').append($delete)):$markup.append($favorite).append($('<br>')).append($delete);
 
-`).append($remove).append($('<br>').append($delete));
-}
+return $markup
 }
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 async function putStoriesOnPage(input) {
