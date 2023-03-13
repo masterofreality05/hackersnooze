@@ -32,7 +32,6 @@ function updateNavOnLogin() {
   $newStoryForm.hide()
 
   $('#submitShow').on("click", function(e){
-    
     e.preventDefault();
     $newStoryForm.toggle()
    })

@@ -33,9 +33,7 @@ function generateStoryMarkup(story, favorite) {
     let storyId = e.target.getAttribute('id')
     let user = currentUser.username;
     let token = currentUser.loginToken
-    $favorite.toggle(
-      $(this).text("Added to favorites")
-    )
+    $favorite.remove()
     const response = await axios ({
       method: "POST",
       url: `${BASE_URL}/users/${user}/favorites/${storyId}`,

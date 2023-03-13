@@ -1,5 +1,4 @@
 "use strict";
-
 // So we don't have to keep re-finding things on page, find DOM elements once:
 const $body = $("body");
 const $storiesLoadingMsg = $("#stories-loading-msg");
@@ -26,7 +25,6 @@ function hidePageComponents() {
 /** Overall function to kick off the app. */
 async function start() {
   console.debug("start");
-
   // "Remember logged-in user" and log in, if credentials in localStorage
   await checkForRememberedUser();
   await getAndShowStoriesOnStart();

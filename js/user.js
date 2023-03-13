@@ -56,7 +56,6 @@ function logout(evt) {
   localStorage.clear();
   location.reload();
 }
-
 $navLogOut.on("click", logout);
 /******************************************************************************
  * Storing/recalling previously-logged-in-user with localStorage
@@ -87,7 +86,6 @@ function saveUserCredentialsInLocalStorage() {
     localStorage.setItem("username", currentUser.username);
   }
 }
-
 /******************************************************************************
  * General UI stuff about users
  */
