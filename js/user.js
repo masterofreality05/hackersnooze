@@ -45,7 +45,7 @@ async function signup(evt) {
 
   $signupForm.trigger("reset");
 }
-  $signupForm.on("submit", signup);
+$signupForm.on("submit", signup);
 
 /** Handle click of logout button
  *
@@ -87,6 +87,7 @@ function saveUserCredentialsInLocalStorage() {
     localStorage.setItem("username", currentUser.username);
   }
 }
+
 /******************************************************************************
  * General UI stuff about users
  */

@@ -43,7 +43,6 @@ function generateStoryMarkup(story, favorite) {
     });
   
   })
-  
   $remove.on("click", async function(e){
     let storyId = e.target.getAttribute('id')
     let user = currentUser.username;
@@ -77,6 +76,7 @@ return $markup
 }
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 async function putStoriesOnPage(input) {
+console.log("input")
 //my attemtp to parse the story list between favorited and unfavorited. .. 
 let token = currentUser.loginToken;
 const response = await axios.get(`${BASE_URL}/users/D` , {params: {token}})
@@ -92,6 +92,7 @@ const response = await axios.get(`${BASE_URL}/users/D` , {params: {token}})
     //*/
 
   console.debug("putStoriesOnPage");
+  console.log(storyList)
 
   $allStoriesList.empty();
 
@@ -99,18 +100,24 @@ const response = await axios.get(`${BASE_URL}/users/D` , {params: {token}})
   for (let story of storyList.stories) {
   
     if(input == "favorited"){
+      
       const $story = generateStoryMarkup(story, "favorited");
       $allStoriesList.append($story);
 
     } else if(input == "own"){
+    
       const $story = generateStoryMarkup(story, "favorited");
       $allStoriesList.append($story);
+
     }
+    
     else {
       
       const $story = generateStoryMarkup(story);
     $allStoriesList.append($story);
     }
+      
+
     }
     $allStoriesList.show();
   }

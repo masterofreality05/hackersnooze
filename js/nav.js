@@ -2,6 +2,7 @@
 /******************************************************************************
  * Handling navbar clicks and updating navbar
  */
+
 /** Show main list of all stories when click site name */
 async function navAllStories(evt) {
   console.debug("navAllStories", evt);
@@ -25,24 +26,25 @@ function updateNavOnLogin() {
   $navLogOut.show();
   $navUserProfile.text(`${currentUser.username}`).show();
   $('.navbar-brand').append('<span><a id="submitShow" class="userLink">Submit </a></span>')
-  $('.navbar-brand').append('<span><a id="favorites" class="userLink">My Favorites </a></span')
+  $('.navbar-brand').append('<span><a id="favorites" class="userLink">Favorites </a></span')
   $('.navbar-brand').append('<a id="ownStories" class="userLink">My Stories</a>')
   $('.navbar-brand').append($newStoryForm)
   $newStoryForm.hide()
 
   $('#submitShow').on("click", function(e){
+    
     e.preventDefault();
     $newStoryForm.toggle()
    })
 
    $('#favorites').on("click", async function(e){
     $storiesLoadingMsg.remove();
-    storyList = await StoryList.getStories(currentUser.username, "favorited");
-    console.log(storyList + "are favorites")
+    storyList = await StoryList.getStories(currentUser.username, "favorite");
     putStoriesOnPage("favorited");
 
    })
    $('#ownStories').on("click", async function(e){
+    console.log(currentUser.username)
     storyList = await StoryList.getStories(currentUser.username, "own");
     $storiesLoadingMsg.remove();
   
