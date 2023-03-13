@@ -25,7 +25,7 @@ function updateNavOnLogin() {
   $navLogOut.show();
   $navUserProfile.text(`${currentUser.username}`).show();
   $('.navbar-brand').append('<span><a id="submitShow" class="userLink">Submit </a></span>')
-  $('.navbar-brand').append('<span><a id="favorites" class="userLink">Favorites </a></span')
+  $('.navbar-brand').append('<span><a id="favorites" class="userLink">My Favorites </a></span')
   $('.navbar-brand').append('<a id="ownStories" class="userLink">My Stories</a>')
   $('.navbar-brand').append($newStoryForm)
   $newStoryForm.hide()
@@ -37,7 +37,8 @@ function updateNavOnLogin() {
 
    $('#favorites').on("click", async function(e){
     $storiesLoadingMsg.remove();
-    storyList = await StoryList.getStories(currentUser.username, "favorite");
+    storyList = await StoryList.getStories(currentUser.username, "favorited");
+    console.log(storyList + "are favorites")
     putStoriesOnPage("favorited");
 
    })

@@ -43,6 +43,7 @@ function generateStoryMarkup(story, favorite) {
     });
   
   })
+  
   $remove.on("click", async function(e){
     let storyId = e.target.getAttribute('id')
     let user = currentUser.username;
