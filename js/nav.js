@@ -25,7 +25,7 @@ function updateNavOnLogin() {
   $navLogOut.show();
   $navUserProfile.text(`${currentUser.username}`).show();
   $('.navbar-brand').append('<span><a id="submitShow" class="userLink">Submit </a></span>')
-  $('.navbar-brand').append('<span><a id="favorites" class="userLink">Favorites</a></span')
+  $('.navbar-brand').append('<span><a id="favorites" class="userLink">Favorites </a></span')
   $('.navbar-brand').append('<a id="ownStories" class="userLink">My Stories</a>')
   $('.navbar-brand').append($newStoryForm)
   $newStoryForm.hide()
