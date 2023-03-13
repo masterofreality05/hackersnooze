@@ -2,7 +2,6 @@
 /******************************************************************************
  * Handling navbar clicks and updating navbar
  */
-
 /** Show main list of all stories when click site name */
 async function navAllStories(evt) {
   console.debug("navAllStories", evt);
@@ -32,7 +31,6 @@ function updateNavOnLogin() {
   $newStoryForm.hide()
 
   $('#submitShow').on("click", function(e){
-    
     e.preventDefault();
     $newStoryForm.toggle()
    })
@@ -44,7 +42,6 @@ function updateNavOnLogin() {
 
    })
    $('#ownStories').on("click", async function(e){
-    console.log(currentUser.username)
     storyList = await StoryList.getStories(currentUser.username, "own");
     $storiesLoadingMsg.remove();
   
