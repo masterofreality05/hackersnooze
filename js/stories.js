@@ -11,13 +11,13 @@ async function getAndShowStoriesOnStart(input) {
 putStoriesOnPage();
 }
 
-function generateStoryMarkup(story, favorite) {
+function generateStoryMarkup(story, favorite, own) {
   let user = currentUser.username;
   let token = currentUser.loginToken
   const hostName = story.getHostName();
-  let $delete = $(`<a class="deleteStory" id="${story.storyId}">Delete Story</a>`)
-  let $remove = $(`<a class="deleteStory" id="${story.storyId}">Remove from Favorites</a>`)
-  let $favorite = $(`<a class="favorite" id="${story.storyId}">Add to Favorites</a>`)
+  let $delete = $(`<a class="deleteStory btn-danger" id="${story.storyId}">Delete Story</a><br>`)
+  let $remove = $(`<a class="deleteStory btn-warning" id="${story.storyId}">Remove from Favorites</a><br>`)
+  let $favorite = $(`<a class="favorite btn-success" id="${story.storyId}">Add to Favorites</a><br>`)
 
   $delete.on("click", async function(e){
     let storyId = $delete.attr("id")
@@ -27,8 +27,6 @@ function generateStoryMarkup(story, favorite) {
  
   $favorite.on("click", async function(e){
     let storyId = e.target.getAttribute('id')
-    
-    //$favorite.remove()
     $favorite.toggle(function (){
       $(this).text("Added to Favorites")
       addtoFavorites(storyId,token, user)      
@@ -56,7 +54,19 @@ let $markup = $(`
 </li>
 `)
 
-favorite == "favorited"? $markup.append($remove).append($('<br>').append($delete)):$markup.append($favorite).append($('<br>')).append($delete);
+ if(own == "ownStory"){
+  console.log("oowowoow")
+$markup.append($favorite).append($delete);
+ }
+
+if(favorite == "favorited"){
+  $markup.remove($favorite).append($remove)
+
+} else {
+  console.log("this should not have delete")
+  $markup.append($favorite)
+  
+}
 
 return $markup
 }
@@ -69,17 +79,9 @@ let favoriteIds = await createFavoriteIdArray()
 console.log("favorite ID array " +  favoriteIds)
 //output IDs of currently favorited stories. 
 
-
-
-
-
-//my attemtp to parse the story list between favorited and unfavorited. .. 
-
-
-//this was my attempt to seperate favorited stories from unfavorited, in order to 
-//change the HTML markup when loading the storylist. 
-
-
+let ownIds = await createOwnStoryArray()
+console.log("own ID array " +  ownIds)
+//output IDs of currently favorited stories. 
 
   console.debug("putStoriesOnPage");
   console.log(storyList)
@@ -88,21 +90,26 @@ console.log("favorite ID array " +  favoriteIds)
 
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
-    console.log("our story id is  " + story.storyId)
   
-    if(favoriteIds.indexOf(story.storyId)!== -1){
-      console.log(story.storyId + " is a favorite")
-      
-      const $story = generateStoryMarkup(story, "favorited");
+    if(favoriteIds.indexOf(story.storyId)!== -1 && ownIds.indexOf(story.storyId)){
+      const $story = generateStoryMarkup(story, "favorited","ownStory");
       $allStoriesList.append($story);
 
-    } /*else if(){
+    } 
+
+    else if(favoriteIds.indexOf(story.storyId !== -1)){
+      const $story = generateStoryMarkup(story,"favorited",false);
+      $allStoriesList.append($story);
+    }
     
-      const $story = generateStoryMarkup(story);
+    else if(ownIds.indexOf(!story.storyId == -1)){
+      console.log("this is registering as our own story.")
+    
+      const $story = generateStoryMarkup(story,false,"ownStory");
       $allStoriesList.append($story);
 
     }
-    */
+  
     else {
       
       const $story = generateStoryMarkup(story);

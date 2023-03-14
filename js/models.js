@@ -37,7 +37,6 @@ class StoryList {
    *  - returns the StoryList instance.
    */
   static async getStories(input, typeOfStory) {
-    console.log("running get stories")
     // Note presence of `static` keyword: this indicates that getStories is
     //  **not** an instance method. Rather, it is a method that is called on the
     //  class directly. Why doesn't it make sense for getStories to be an
@@ -197,11 +196,18 @@ class User {
 
 async function addtoFavorites(Id,token, user){
   let storyId = Id
+  let favoriteIdArray = await createFavoriteIdArray()
+  console.log("passed as argument is" + favoriteIdArray)
+  if(favoriteIdArray.indexOf(storyId) !== -1){
+    alert("this is already in your favorites")
+  } else {
+
   const response = await axios ({
     method: "POST",
     url: `${BASE_URL}/users/${user}/favorites/${storyId}`,
     data: { token },
   });
+}
 
 }
 
@@ -234,9 +240,23 @@ async function createFavoriteIdArray(){
   const response = await axios.get(`${BASE_URL}/users/${user}` , {params: {token}})
     console.log("this is our favorites" + response.data.user.favorites)
      for (let fav of response.data.user.favorites){
-      console.log("storyId should be " + fav.storyId)
+      
       favoriteIdArray.push(fav.storyId)
       }
   
       return favoriteIdArray
   } 
+
+  async function createOwnStoryArray(){
+    let ownIdArray = []
+    let user = currentUser.username
+    let token = currentUser.loginToken;
+    const response = await axios.get(`${BASE_URL}/users/${user}` , {params: {token}})
+      console.log("this is our ownss" + response.data.user.stories)
+       for (let own of response.data.user.stories){
+        console.log("storyId should be " + own.storyId)
+        ownIdArray.push(own.storyId)
+        }
+    
+        return ownIdArray
+    } 
