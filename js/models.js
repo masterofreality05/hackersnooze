@@ -146,24 +146,30 @@ class User {
    * - password: an existing user's password
    */
   static async login(username, password) {
-    const response = await axios({
-      url: `${BASE_URL}/login`,
-      method: "POST",
-      data: { user: { username, password } },
-    });
+    try{
+      const response = await axios({
+        url: `${BASE_URL}/login`,
+        method: "POST",
+        data: { user: { username, password } },
+      });
+  
+      let { user } = response.data;
+  
+      return new User(
+        {
+          username: user.username,
+          name: user.name,
+          createdAt: user.createdAt,
+          favorites: user.favorites,
+          ownStories: user.stories
+        },
+        response.data.token
+      );
 
-    let { user } = response.data;
-
-    return new User(
-      {
-        username: user.username,
-        name: user.name,
-        createdAt: user.createdAt,
-        favorites: user.favorites,
-        ownStories: user.stories
-      },
-      response.data.token
-    );
+    } catch(err){
+      alert("API request was not possible", err)
+    }
+    
   }
   /** When we already have credentials (token & username) for a user,
    *   we can log them in automatically. This function does that.
@@ -202,16 +208,22 @@ async function addtoFavorites(Id,token, user){
     alert("this is already in your favorites")
   } else {
 
-  const response = await axios ({
-    method: "POST",
-    url: `${BASE_URL}/users/${user}/favorites/${storyId}`,
-    data: { token },
-  });
+  try {
+    const response = await axios ({
+      method: "POST",
+      url: `${BASE_URL}/users/${user}/favorites/${storyId}`,
+      data: { token },
+    });
+  } catch(err){
+    alert("unsuccessful POST requesto API", err)
+  }
+
 }
 
 }
 
 async function removeFromFavorites(Id, token, user){
+  try {
   let storyId = Id;
   const response = await axios ({
     method: "DELETE",
@@ -219,26 +231,37 @@ async function removeFromFavorites(Id, token, user){
     data: { token },
 
 })
+  } catch(err){
+    alert("unsuccessful DELETE request to API", err)
+  }
+
 
 }
 
 async function deleteStory(id, token, user){
-  let storyId = id
-  const response = await axios ({
+  try {
+    let storyId = id
+    const response = await axios ({
+  
+      method: "DELETE",
+      url: `${BASE_URL}/stories/${storyId}`,
+      data: { token },
+  
+  })
 
-    method: "DELETE",
-    url: `${BASE_URL}/stories/${storyId}`,
-    data: { token },
+  } catch(err){
+    alert("unsuccessful POST request to API", err)
+  }
 
-})
 }
 
+
 async function createFavoriteIdArray(){
-  let favoriteIdArray = []
-  let user = currentUser.username
+  try{
+  let user =currentUser.username
   let token = currentUser.loginToken;
+  let favoriteIdArray = []
   const response = await axios.get(`${BASE_URL}/users/${user}` , {params: {token}})
-    console.log("this is our favorites" + response.data.user.favorites)
      for (let fav of response.data.user.favorites){
       
       favoriteIdArray.push(fav.storyId)
@@ -246,17 +269,28 @@ async function createFavoriteIdArray(){
   
       return favoriteIdArray
   } 
+  catch(err){
+    alert("API request failed", err)
+  
+  }
+} 
 
   async function createOwnStoryArray(){
-    let ownIdArray = []
-    let user = currentUser.username
+
+    try{
+    let user =currentUser.username
     let token = currentUser.loginToken;
+    let ownIdArray = []
     const response = await axios.get(`${BASE_URL}/users/${user}` , {params: {token}})
-      console.log("this is our ownss" + response.data.user.stories)
        for (let own of response.data.user.stories){
-        console.log("our own story id is" + own.storyId)
         ownIdArray.push(own.storyId)
         }
     
         return ownIdArray
+      
+    } catch(err){
+      alert("API request was not possible", err)
+    }
+    
     } 
+

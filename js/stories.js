@@ -35,11 +35,9 @@ function generateStoryMarkup(story, favorite, own) {
 })
   $remove.on("click", async function(e){
     let storyId = e.target.getAttribute('id')
-    console.log(storyId)
-
   removeFromFavorites(storyId,token,user)   
   storyList = await StoryList.getStories(currentUser.username, "favorite");
-
+  $remove.text("Removed from favorites")
 
 })
 
@@ -55,7 +53,6 @@ let $markup = $(`
 `)
 
  if(own == "ownStory"){
-  console.log("oowowoow")
 $markup.append($delete);
  }
 
@@ -63,38 +60,25 @@ if(favorite == "favorited"){
   $markup.remove($favorite).append($remove)
 
 } else {
-  console.log("this should not have delete")
   $markup.append($favorite)
-  
 }
 
 return $markup
 }
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 async function putStoriesOnPage(input) {
-  console.log("runningggggggg")
-
 let favoriteIds = await createFavoriteIdArray()
-console.log("favorite ID array " +  favoriteIds)
-//output IDs of currently favorited stories. 
-
 let ownIds = await createOwnStoryArray()
-console.log("own ID array " +  ownIds)
-//output IDs of currently favorited stories. 
+
+
 
   console.debug("putStoriesOnPage");
-  console.log(storyList)
-
   $allStoriesList.empty();
 
   // loop through all of our stories and generate HTML for them
-  for (let story of storyList.stories) {
-    
-    
-  
+  for (let story of storyList.stories) { 
     if(favoriteIds.indexOf(story.storyId)!== -1 && ownIds.indexOf(story.storyId) !== -1){
 
-      console.log("favorited my own story")
       const $story = generateStoryMarkup(story, "favorited","ownStory");
       $allStoriesList.append($story);
 
@@ -102,14 +86,14 @@ console.log("own ID array " +  ownIds)
    
 
     else if(favoriteIds.indexOf(story.storyId)!== -1){
-      console.log("just a favorite")
+
       const $story = generateStoryMarkup(story, "favorited",false);
       $allStoriesList.append($story);
 
     }
     
     else if(ownIds.indexOf(story.storyId) !== -1){
-      console.log("this is registering as our own story.")
+ 
     
       const $story = generateStoryMarkup(story,false,"ownStory");
       $allStoriesList.append($story);
@@ -117,7 +101,7 @@ console.log("own ID array " +  ownIds)
     }
   
     else {
-      console.log("no amendments yet")
+      
     
       const $story = generateStoryMarkup(story);
     $allStoriesList.append($story);
