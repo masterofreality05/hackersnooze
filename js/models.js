@@ -194,3 +194,35 @@ class User {
     }
   }
 }
+
+async function addtoFavorites(Id,token, user){
+  let storyId = Id
+  const response = await axios ({
+    method: "POST",
+    url: `${BASE_URL}/users/${user}/favorites/${storyId}`,
+    data: { token },
+  });
+
+}
+
+async function removeFromFavorites(Id, token, user){
+  let storyId = Id;
+  const response = await axios ({
+    method: "DELETE",
+    url: `${BASE_URL}/users/${user}/favorites/${storyId}`,
+    data: { token },
+
+})
+
+}
+
+async function deleteStory(id, token, user){
+  let storyId = id
+  const response = await axios ({
+
+    method: "DELETE",
+    url: `${BASE_URL}/stories/${storyId}`,
+    data: { token },
+
+})
+}

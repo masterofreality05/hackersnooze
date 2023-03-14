@@ -2,6 +2,7 @@
 
 // This is the global list of the stories, an instance of StoryList
 let storyList;
+
 /** Get and show stories when site first loads. */
 async function getAndShowStoriesOnStart(input) {
   storyList = await StoryList.getStories(input);
@@ -11,53 +12,41 @@ putStoriesOnPage();
 }
 
 function generateStoryMarkup(story, favorite) {
+  let user = currentUser.username;
+  let token = currentUser.loginToken
   const hostName = story.getHostName();
   let $delete = $(`<a class="deleteStory" id="${story.storyId}">Delete Story</a>`)
   let $remove = $(`<a class="deleteStory" id="${story.storyId}">Remove from Favorites</a>`)
   let $favorite = $(`<a class="favorite" id="${story.storyId}">Add to Favorites</a>`)
 
   $delete.on("click", async function(e){
-    let token = currentUser.loginToken;
     let storyId = $delete.attr("id")
-    const response = await axios ({
-    
-      method: "DELETE",
-      url: `${BASE_URL}/stories/${storyId}`,
-      data: { token },
+    await deleteStory(storyId,token,user)
+    getAndShowStoriesOnStart()
+    })
+   
+ 
 
-  })
- getAndShowStoriesOnStart()
-})
+
+
 
   $favorite.on("click", async function(e){
     let storyId = e.target.getAttribute('id')
-    let user = currentUser.username;
-    let token = currentUser.loginToken
+    
     //$favorite.remove()
     $favorite.toggle(function (){
       $(this).text("Added to Favorites")
-      .stop();
+      addtoFavorites(storyId,token, user)      
   })
-  
 
-    const response = await axios ({
-      method: "POST",
-      url: `${BASE_URL}/users/${user}/favorites/${storyId}`,
-      data: { token },
-    });
-  
-  })
+
+
+})
   $remove.on("click", async function(e){
     let storyId = e.target.getAttribute('id')
-    let user = currentUser.username;
-    let token = currentUser.loginToken
+    console.log(storyId)
 
-    const response = await axios ({
-      method: "DELETE",
-      url: `${BASE_URL}/users/${user}/favorites/${storyId}`,
-      data: { token },
-  
-  })
+  removeFromFavorites(storyId,token,user)   
   storyList = await StoryList.getStories(currentUser.username, "favorite");
   putStoriesOnPage("favorited")
 
