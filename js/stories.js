@@ -39,7 +39,7 @@ function generateStoryMarkup(story, favorite, own) {
 
   removeFromFavorites(storyId,token,user)   
   storyList = await StoryList.getStories(currentUser.username, "favorite");
-  putStoriesOnPage("favorited")
+
 
 })
 
@@ -56,7 +56,7 @@ let $markup = $(`
 
  if(own == "ownStory"){
   console.log("oowowoow")
-$markup.append($favorite).append($delete);
+$markup.append($delete);
  }
 
 if(favorite == "favorited"){
@@ -72,8 +72,7 @@ return $markup
 }
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 async function putStoriesOnPage(input) {
-
-
+  console.log("runningggggggg")
 
 let favoriteIds = await createFavoriteIdArray()
 console.log("favorite ID array " +  favoriteIds)
@@ -90,19 +89,26 @@ console.log("own ID array " +  ownIds)
 
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
+    
+    
   
-    if(favoriteIds.indexOf(story.storyId)!== -1 && ownIds.indexOf(story.storyId)){
+    if(favoriteIds.indexOf(story.storyId)!== -1 && ownIds.indexOf(story.storyId) !== -1){
+
+      console.log("favorited my own story")
       const $story = generateStoryMarkup(story, "favorited","ownStory");
       $allStoriesList.append($story);
 
     } 
+   
 
-    else if(favoriteIds.indexOf(story.storyId !== -1)){
-      const $story = generateStoryMarkup(story,"favorited",false);
+    else if(favoriteIds.indexOf(story.storyId)!== -1){
+      console.log("just a favorite")
+      const $story = generateStoryMarkup(story, "favorited",false);
       $allStoriesList.append($story);
+
     }
     
-    else if(ownIds.indexOf(!story.storyId == -1)){
+    else if(ownIds.indexOf(story.storyId) !== -1){
       console.log("this is registering as our own story.")
     
       const $story = generateStoryMarkup(story,false,"ownStory");
@@ -111,18 +117,20 @@ console.log("own ID array " +  ownIds)
     }
   
     else {
-      
+      console.log("no amendments yet")
+    
       const $story = generateStoryMarkup(story);
     $allStoriesList.append($story);
-    }
-      
 
     }
     $allStoriesList.show();
-  }
+
+    }
+
+  
  
 
 
-
+  }
 
 

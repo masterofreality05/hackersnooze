@@ -7,7 +7,8 @@
 async function navAllStories(evt) {
   console.debug("navAllStories", evt);
   hidePageComponents();
-  getAndShowStoriesOnStart()
+  storyList = await StoryList.getStories(currentUser.username,)
+  putStoriesOnPage()
 }
 $body.on("click", "#nav-all", navAllStories);
 /** Show login/signup on click on "login" */

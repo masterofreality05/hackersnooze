@@ -254,7 +254,7 @@ async function createFavoriteIdArray(){
     const response = await axios.get(`${BASE_URL}/users/${user}` , {params: {token}})
       console.log("this is our ownss" + response.data.user.stories)
        for (let own of response.data.user.stories){
-        console.log("storyId should be " + own.storyId)
+        console.log("our own story id is" + own.storyId)
         ownIdArray.push(own.storyId)
         }
     
