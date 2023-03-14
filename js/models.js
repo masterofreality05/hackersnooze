@@ -226,3 +226,17 @@ async function deleteStory(id, token, user){
 
 })
 }
+
+async function createFavoriteIdArray(){
+  let favoriteIdArray = []
+  let user = currentUser.username
+  let token = currentUser.loginToken;
+  const response = await axios.get(`${BASE_URL}/users/${user}` , {params: {token}})
+    console.log("this is our favorites" + response.data.user.favorites)
+     for (let fav of response.data.user.favorites){
+      console.log("storyId should be " + fav.storyId)
+      favoriteIdArray.push(fav.storyId)
+      }
+  
+      return favoriteIdArray
+  } 

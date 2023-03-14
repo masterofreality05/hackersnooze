@@ -24,12 +24,7 @@ function generateStoryMarkup(story, favorite) {
     await deleteStory(storyId,token,user)
     getAndShowStoriesOnStart()
     })
-   
  
-
-
-
-
   $favorite.on("click", async function(e){
     let storyId = e.target.getAttribute('id')
     
@@ -38,8 +33,6 @@ function generateStoryMarkup(story, favorite) {
       $(this).text("Added to Favorites")
       addtoFavorites(storyId,token, user)      
   })
-
-
 
 })
   $remove.on("click", async function(e){
@@ -69,20 +62,24 @@ return $markup
 }
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 async function putStoriesOnPage(input) {
-console.log("input")
+
+
+
+let favoriteIds = await createFavoriteIdArray()
+console.log("favorite ID array " +  favoriteIds)
+//output IDs of currently favorited stories. 
+
+
+
+
+
 //my attemtp to parse the story list between favorited and unfavorited. .. 
-let token = currentUser.loginToken;
-const response = await axios.get(`${BASE_URL}/users/D` , {params: {token}})
+
 
 //this was my attempt to seperate favorited stories from unfavorited, in order to 
 //change the HTML markup when loading the storylist. 
 
-  /*console.log("this is our favorites" + response.data.user.favorites)
-   for (let fav of response.data.user.favorites){
-    console.log("storyId should be " + fav.storyId)
-    //favoriteIdArray.push(fav.storyId)
-    }
-    //*/
+
 
   console.debug("putStoriesOnPage");
   console.log(storyList)
@@ -91,19 +88,21 @@ const response = await axios.get(`${BASE_URL}/users/D` , {params: {token}})
 
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
+    console.log("our story id is  " + story.storyId)
   
-    if(input == "favorited"){
+    if(favoriteIds.indexOf(story.storyId)!== -1){
+      console.log(story.storyId + " is a favorite")
       
       const $story = generateStoryMarkup(story, "favorited");
       $allStoriesList.append($story);
 
-    } else if(input == "own"){
+    } /*else if(){
     
-      const $story = generateStoryMarkup(story, "favorited");
+      const $story = generateStoryMarkup(story);
       $allStoriesList.append($story);
 
     }
-    
+    */
     else {
       
       const $story = generateStoryMarkup(story);
